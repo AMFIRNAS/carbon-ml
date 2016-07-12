@@ -17,9 +17,9 @@
  */
 package org.wso2.carbon.ml.core.interfaces;
 
-import java.io.InputStream;
-
 import org.wso2.carbon.ml.core.exceptions.MLInputAdapterException;
+
+import java.io.InputStream;
 
 /**
  * This interface should be implemented, if you need to read content from a given path.
@@ -33,4 +33,5 @@ public interface MLInputAdapter {
      * @throws MLInputAdapterException on a read failure.
      */
     InputStream read(String path) throws MLInputAdapterException;
+
 }

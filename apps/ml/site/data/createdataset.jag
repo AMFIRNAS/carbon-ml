@@ -127,8 +127,15 @@
                                         <option value="file">File</option>
                                         <option value="hdfs">HDFS</option>
                                         <option value="das">DAS</option>
+                                        <option value="time_series">Time Series</option>
                                     </select>               
-                                </div>  
+                                </div>
+
+                                <label class="input-label" id="wl">Window Length<span class="help-tip glyphicon glyphicon-question-sign" data-toggle="tooltip" data-placement="right" title="size of the window to be split the dataset to support Time Series Algorithm"></span></label>
+                                <span class="fld-required" id="wl1">*</span>
+                                <div class="input-control text">
+                                    <input type="text" value="3" placeholder="" id="window-length" name="windowLength"/>
+                                </div>
 
                                 <label class="input-label">Data Source<span class="File Location"></span>  <span><label class="input-label" id="size-limit">(max size: 100MB)</label></span></label>
                                 <span class="fld-required">*</span>
@@ -211,7 +218,7 @@
             function displayDataSource() {
                 var dataSourceType = $('#src-type option:selected').text();
                 if (dataSourceType == 'HDFS') {
-                    $('#source-file, #size-limit, #source-das, #source-das-table').hide();
+                    $('#source-file, #size-limit, #source-das, #source-das-table,#window-length,#wl,#wl1').hide();
                     $('#not-das').show();
                     var hdfsInput = '<div id="source-hdfs" class="input-control text">' +
                         '<input type="text" value="" placeholder="e.g. hdfs://localhost:9000/home/datasets/iris.csv" id="src-path" name="sourcePath" />' +
@@ -219,7 +226,7 @@
                     $('#source-hdfs-das').html(hdfsInput);
 
                 } else if (dataSourceType == 'DAS') {
-                    $('#source-file, #size-limit, #source-hdfs, #not-das, #source-das-table').hide();
+                    $('#source-file, #size-limit, #source-hdfs, #not-das, #source-das-table,#window-length,#wl,#wl1').hide();
                     var dasInput = '<div id="source-das">' +
                         '<div id="source-das-input" class="input-control text" style="position:relative">' +
                         '<input type="text" value="" placeholder="" id="selected-table" name="sourcePath" readonly/><a style="position:absolute; right:0px" id="select-table" class="cu-level3-btn btn-set-dt" href="#"></a>' +
@@ -227,9 +234,14 @@
                         '</div>';
                     $('#source-hdfs-das').html(dasInput);
                     loadDataTables();
-                } else { // File
+                } else if (dataSourceType == 'Time Series'){
                     $('#source-hdfs-das').html("");
                     $('#source-das-table').hide();
+                    $('#source-file, #size-limit, #not-das,#window-length,#wl,#wl1').show();
+                }
+                else{ // File
+                    $('#source-hdfs-das').html("");
+                    $('#source-das-table,#window-length,#wl,#wl1').hide();
                     $('#source-file, #size-limit, #not-das').show();
                 }
             }
@@ -270,6 +282,8 @@
                     error: function(res) {
                         var errorText = JSON.parse(res.responseText)["exception"];
                         handleNotification(errorText, '#notification-area', 'warning');
+                       // var err = eval("(" + xhr.responseText + ")");
+                        //alert(err.Message);
                     }
                 });
 
@@ -279,6 +293,7 @@
 
                 // change data source input according to data source type input
                 $('#src-type').on('change', function(e) {
+                    displayDataSource();
                     displayDataSource();
                 });
 

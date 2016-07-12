@@ -105,6 +105,7 @@ public class MLDatabaseService implements DatabaseService {
             insertStatement.setString(5, dataset.getDataSourceType());
             insertStatement.setString(6, dataset.getDataTargetType());
             insertStatement.setString(7, dataset.getDataType());
+            //insertStatement.setInt(8, dataset.getWindowLength());
             insertStatement.execute();
             connection.commit();
             if (logger.isDebugEnabled()) {

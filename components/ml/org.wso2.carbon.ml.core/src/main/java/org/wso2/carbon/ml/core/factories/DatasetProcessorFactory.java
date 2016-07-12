@@ -17,14 +17,15 @@
  */
 package org.wso2.carbon.ml.core.factories;
 
-import java.io.InputStream;
-
 import org.wso2.carbon.ml.commons.domain.MLDataset;
 import org.wso2.carbon.ml.core.exceptions.MLInputValidationException;
 import org.wso2.carbon.ml.core.impl.DASDatasetProcessor;
 import org.wso2.carbon.ml.core.impl.FileDatasetProcessor;
 import org.wso2.carbon.ml.core.impl.HdfsDatasetProcessor;
+import org.wso2.carbon.ml.core.impl.TimeSeriesDatasetProcessor;
 import org.wso2.carbon.ml.core.interfaces.DatasetProcessor;
+
+import java.io.InputStream;
 
 /**
  * This factory class is responsible for generating a {@link DatasetProcessor} for a given type.
@@ -44,6 +45,9 @@ public class DatasetProcessorFactory {
         case HDFS:
             datasetProcessor = new HdfsDatasetProcessor(dataset);
             break;
+        case TIME_SERIES:
+             datasetProcessor = new TimeSeriesDatasetProcessor(dataset,inputStream);
+             break;
         default:
             throw new MLInputValidationException("Invalid dataset source type: " + type.name());
         }

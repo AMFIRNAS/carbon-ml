@@ -60,4 +60,9 @@ public class RegistryOutputAdapter implements MLOutputAdapter {
                     String.format("Failed to save the model to registry %s: %s", outPath, e), e);
         }
     }
+
+//    @Override
+//    public void write(String outPath) throws MLOutputAdapterException {
+//
+//    }
 }

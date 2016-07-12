@@ -17,10 +17,6 @@
  */
 package org.wso2.carbon.ml.core.impl;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.URI;
-
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FSDataOutputStream;
 import org.apache.hadoop.fs.FileSystem;
@@ -29,6 +25,10 @@ import org.apache.hadoop.io.IOUtils;
 import org.wso2.carbon.ml.core.exceptions.MLOutputAdapterException;
 import org.wso2.carbon.ml.core.interfaces.MLOutputAdapter;
 import org.wso2.carbon.ml.core.utils.MLCoreServiceValueHolder;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URI;
 
 /**
  * HDFS based output adapter for ML. Responsible for writing a given input stream to a given HDFS path.
@@ -76,5 +76,10 @@ public class HdfsOutputAdapter implements MLOutputAdapter {
             }
         }
     }
+
+//    @Override
+//    public void write(String outPath) throws MLOutputAdapterException {
+//
+//    }
 
 }

@@ -105,6 +105,7 @@
                                 <option value="RIDGE_REGRESSION">RIDGE REGRESSION</option>
                                 <option value="LASSO_REGRESSION">LASSO REGRESSION</option>
                                 <option value="RANDOM_FOREST_REGRESSION">RANDOM FOREST REGRESSION</option>
+                                <option value="TIME_SERIES">TIME SERIES</option>
                             </optgroup>                        
                             <optgroup label="Binary Classification">
                                 <option value="LOGISTIC_REGRESSION">LOGISTIC REGRESSION SGD</option>
@@ -557,7 +558,7 @@
 
                 var algorithmType;
 
-                if (algorithmName == 'LINEAR_REGRESSION' || algorithmName == 'RIDGE_REGRESSION' || algorithmName == 'LASSO_REGRESSION' || algorithmName == 'RANDOM_FOREST_REGRESSION') {
+                if (algorithmName == 'LINEAR_REGRESSION' || algorithmName == 'RIDGE_REGRESSION' || algorithmName == 'LASSO_REGRESSION' || algorithmName == 'RANDOM_FOREST_REGRESSION' || algorithmName == 'TIME_SERIES') {
                     algorithmType = 'Numerical_Prediction';
                 } else if (algorithmName == 'LOGISTIC_REGRESSION' || algorithmName == 'LOGISTIC_REGRESSION_LBFGS' || algorithmName == 'SVM' || algorithmName == 'DECISION_TREE' || algorithmName == 'RANDOM_FOREST_CLASSIFICATION' || algorithmName == 'NAIVE_BAYES') {
                     algorithmType = 'Classification';

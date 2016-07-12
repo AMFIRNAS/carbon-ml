@@ -231,6 +231,41 @@
 			</Parameters>
 		</Algorithm>
 		<Algorithm>
+			<Name>TIME_SERIES</Name>
+			<Type>Numerical_Prediction</Type>
+			<isPMMLExportable>true</isPMMLExportable>
+			<Parameters>
+				<Name>Iterations</Name>
+				<Value>100</Value>
+				<Description>Number of times optimizer runs before completing the
+					optimization process. This parameter value should be an integer
+					greater than 0.
+				</Description>
+			</Parameters>
+			<Parameters>
+				<Name>Learning_Rate</Name>
+				<Value>0.001</Value>
+				<Description>Step size of the optimization algorithm. This parameter
+					value should be between 0 and 1, 1 inclusive.
+				</Description>
+			</Parameters>
+			<Parameters>
+				<Name>Window_Length</Name>
+				<Value>3</Value>
+				<Description>
+					Length of the window size.This parameter value should be greater than 0.
+				</Description>
+			</Parameters>
+			<Parameters>
+				<Name>SGD_Data_Fraction</Name>
+				<Value>1</Value>
+				<Description>Fraction of the training dataset used per iteration
+					in the optimization algorithm. This parameter value should be
+					between 0 and 1, 1 inclusive.
+				</Description>
+			</Parameters>
+		</Algorithm>
+		<Algorithm>
 			<Name>LOGISTIC_REGRESSION</Name>
 			<Type>Classification</Type>
 			<isPMMLExportable>true</isPMMLExportable>

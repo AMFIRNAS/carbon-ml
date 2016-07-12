@@ -17,9 +17,9 @@
  */
 package org.wso2.carbon.ml.core.interfaces;
 
-import java.io.InputStream;
-
 import org.wso2.carbon.ml.core.exceptions.MLOutputAdapterException;
+
+import java.io.InputStream;
 
 /**
  * This interface should be implemented, if you need to write an input stream to a given path of a specific data source.
@@ -28,10 +28,15 @@ public interface MLOutputAdapter {
 
     /**
      * Write a given input stream to a given target path.
-     * 
-     * @param outPath targeted path. eg: /test.txt 
+     *
+     * @param outPath targeted path. eg: /test.txt
      * @param in {@link InputStream} to be written. This should be closed by this method.
      * @throws MLOutputAdapterException on a write failure.
      */
+
+
     void write(String outPath, InputStream in) throws MLOutputAdapterException;
+
+
+  // void write(String outPath) throws MLOutputAdapterException;
 }

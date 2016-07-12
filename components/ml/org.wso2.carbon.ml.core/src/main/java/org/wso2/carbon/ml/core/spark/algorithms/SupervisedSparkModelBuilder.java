@@ -18,9 +18,6 @@
 
 package org.wso2.carbon.ml.core.spark.algorithms;
 
-import java.text.DecimalFormat;
-import java.util.*;
-
 import org.apache.spark.api.java.JavaPairRDD;
 import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.api.java.JavaSparkContext;
@@ -58,8 +55,10 @@ import org.wso2.carbon.ml.core.utils.MLCoreServiceValueHolder;
 import org.wso2.carbon.ml.core.utils.MLUtils;
 import org.wso2.carbon.ml.database.DatabaseService;
 import org.wso2.carbon.ml.database.exceptions.DatabaseHandlerException;
-
 import scala.Tuple2;
+
+import java.text.DecimalFormat;
+import java.util.*;
 
 /**
  * Build supervised models supported by Spark.
@@ -82,6 +81,7 @@ public class SupervisedSparkModelBuilder extends MLModelBuilder {
             BasicEncoder basicEncoder = new BasicEncoder.Builder().init(context).build();
             MeanImputation meanImputation = new MeanImputation.Builder().init(context).build();
             StringArrayToDoubleArray stringArrayToDoubleArray = new StringArrayToDoubleArray.Builder().build();
+           // System.out.println(stringArrayToDoubleArray);
             DoubleArrayToLabeledPoint doubleArrayToLabeledPoint = new DoubleArrayToLabeledPoint.Builder().build();
 
             lines = context.getLines().cache();
@@ -136,12 +136,20 @@ public class SupervisedSparkModelBuilder extends MLModelBuilder {
             JavaRDD<LabeledPoint>[] dataSplit = labeledPoints.randomSplit(
                     new double[] { workflow.getTrainDataFraction(), 1 - workflow.getTrainDataFraction() },
                     MLConstants.RANDOM_SEED);
+
+
+           // System.out.println(dataSplit.toString().toCharArray());
             
             // remove from cache
             labeledPoints.unpersist();
             
             JavaRDD<LabeledPoint> trainingData = dataSplit[0].cache();
+
+           // System.out.println(trainingData.toString().toCharArray());
+
             JavaRDD<LabeledPoint> testingData = dataSplit[1];
+
+           // System.out.println(testingData.toString().toCharArray());
             // create a deployable MLModel object
             mlModel.setAlgorithmName(workflow.getAlgorithmName());
             mlModel.setAlgorithmClass(workflow.getAlgorithmClass());
@@ -199,6 +207,10 @@ public class SupervisedSparkModelBuilder extends MLModelBuilder {
                 categoricalFeatureInfo = getCategoricalFeatureInfo(context.getEncodings());
                 summaryModel = buildRandomForestRegressionModel(sparkContext, modelId, trainingData, testingData, workflow,
                         mlModel, includedFeatures, categoricalFeatureInfo);
+                break;
+            case TIME_SERIES:
+                summaryModel = buildTimeSeriesModel(sparkContext,modelId,trainingData,testingData,workflow,
+                        mlModel,includedFeatures);
                 break;
             default:
                 throw new AlgorithmNameException("Incorrect algorithm name");
@@ -805,6 +817,97 @@ public class SupervisedSparkModelBuilder extends MLModelBuilder {
                     e);
         }
     }
+
+
+
+
+    /**
+     * This method builds a time series model
+     *
+     * @param sparkContext JavaSparkContext initialized with the application
+     * @param modelID Model ID
+     * @param trainingData Training data as a JavaRDD of LabeledPoints
+     * @param testingData Testing data as a JavaRDD of LabeledPoints
+     * @param workflow Machine learning workflow
+     * @param mlModel Deployable machine learning model
+     * @throws MLModelBuilderException
+     */
+    private ModelSummary buildTimeSeriesModel(JavaSparkContext sparkContext, long modelID,
+                                                    JavaRDD<LabeledPoint> trainingData, JavaRDD<LabeledPoint> testingData, Workflow workflow, MLModel mlModel,
+                                                    SortedMap<Integer, String> includedFeatures) throws MLModelBuilderException {
+//        try {
+        // TimeSeries timeSeries = new TimeSeries();
+        Map<String, String> hyperParameters = workflow.getHyperParameters();
+        //TimeSeriesModel timeSeriesModel = timeSeries.train(trainingData,
+
+
+      //  System.out.println((Integer.parseInt(hyperParameters.get(MLConstants.ITERATIONS))));
+      //  System.out.println((Double.parseDouble(hyperParameters.get(MLConstants.LEARNING_RATE))));
+      //  System.out.println((hyperParameters.get(MLConstants.SGD_DATA_FRACTION)));
+       // System.out.println((hyperParameters.get(MLConstants.WINDOW_LENGTH)));
+
+
+//                    );
+//
+//            // remove from cache
+//            trainingData.unpersist();
+//            // add test data to cache
+//            testingData.cache();
+//
+//            Vector weights = timeSeriesModel.weights();
+//            if (!isValidWeights(weights)) {
+//                throw new MLModelBuilderException("Weights of the model generated are null or infinity. [Weights] "
+//                        + vectorToString(weights));
+//            }
+//            JavaRDD<Tuple2<Double, Double>> predictionsAndLabels = timeSeries.test(timeSeriesModel,
+//                    testingData).cache();
+//            ClassClassificationAndRegressionModelSummary regressionModelSummary = SparkModelUtils
+//                    .generateRegressionModelSummary(sparkContext, testingData, predictionsAndLabels);
+//
+//            // remove from cache
+//            testingData.unpersist();
+//
+//            mlModel.setModel(new MLGeneralizedLinearModel(timeSeriesModel));
+//
+//            List<FeatureImportance> featureWeights = getFeatureWeights(includedFeatures, timeSeriesModel
+//                    .weights().toArray());
+//            regressionModelSummary.setFeatures(includedFeatures.values().toArray(new String[0]));
+//            regressionModelSummary.setFeatureImportance(featureWeights);
+//            regressionModelSummary.setAlgorithm(SUPERVISED_ALGORITHM.TIME_SERIES.toString());
+//
+//            RegressionMetrics regressionMetrics = getRegressionMetrics(sparkContext, predictionsAndLabels);
+//
+//            predictionsAndLabels.unpersist();
+//
+//            Double meanSquaredError = regressionMetrics.meanSquaredError();
+//            regressionModelSummary.setMeanSquaredError(meanSquaredError);
+//            regressionModelSummary.setDatasetVersion(workflow.getDatasetVersion());
+//
+//            return regressionModelSummary;
+//        } catch (Exception e) {
+//            throw new MLModelBuilderException("An error occurred while building linear regression model: "
+//                    + e.getMessage(), e);
+//        }
+//    }
+
+
+//}
+
+        return null;
+
+
+    }
+
+
+
+
+
+
+
+
+
+
+
 
     /**
      * @param features Array of names of features

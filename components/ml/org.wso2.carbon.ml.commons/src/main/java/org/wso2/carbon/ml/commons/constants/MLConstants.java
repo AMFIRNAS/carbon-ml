@@ -170,6 +170,7 @@ public class MLConstants {
     public static final String BLOCKS = "Blocks";
     public static final String ALPHA = "Alpha";
     public static final String WEIGHTS = "Weights";
+    public static final String WINDOW_LENGTH = "Window_Length";
 
     // configuration file names
     public static final String ML_ALGORITHMS_CONFIG_XML = "repository/conf/etc/ml-algorithms.xml";
@@ -231,7 +232,7 @@ public class MLConstants {
     // enums
     public enum SUPERVISED_ALGORITHM {
         LINEAR_REGRESSION, RIDGE_REGRESSION, LASSO_REGRESSION, LOGISTIC_REGRESSION, LOGISTIC_REGRESSION_LBFGS,
-        SVM, DECISION_TREE, RANDOM_FOREST_CLASSIFICATION, NAIVE_BAYES, RANDOM_FOREST_REGRESSION
+        SVM, DECISION_TREE, RANDOM_FOREST_CLASSIFICATION, NAIVE_BAYES, RANDOM_FOREST_REGRESSION,TIME_SERIES
     }
 
     public enum UNSUPERVISED_ALGORITHM {

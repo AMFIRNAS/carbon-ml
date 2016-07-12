@@ -26,6 +26,8 @@ public class MLDataset {
     private String name;
     private int tenantId;
     private String userName;
+    private int windowLength;
+
 
     /*
      * Type of the data source i.e. hdfs, file, bam etc.
@@ -150,12 +152,20 @@ public class MLDataset {
         this.status = status;
     }
 
+    public int getWindowLength() {
+        return windowLength;
+    }
+
+    public void setWindowLength(int windowLength) {
+        this.windowLength = windowLength;
+    }
+
     @Override
     public String toString() {
         return "MLDataset [id=" + id + ", name=" + name + ", tenantId=" + tenantId + ", userName=" + userName
                 + ", dataSourceType=" + dataSourceType + ", dataTargetType=" + dataTargetType + ", sourcePath="
                 + sourcePath + ", dataType=" + dataType + ", comments=" + comments + ", version=" + version
-                + ", containsHeader=" + containsHeader + ", status=" + status + "]";
+                + ", containsHeader=" + containsHeader + ", status=" + status + ", window length=" + windowLength + "]";
     }
 
 }

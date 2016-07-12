@@ -108,6 +108,7 @@
                                         <option value="file">File</option>
                                         <option value="hdfs">HDFS</option>
                                         <option value="das">DAS</option>
+                                        <option value="time_series">Time Series</option>
                                     </select>               
                                 </div>  
 

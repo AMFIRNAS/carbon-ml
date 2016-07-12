@@ -18,19 +18,7 @@
 package org.wso2.carbon.ml.core.impl;
 
 
-import java.io.*;
-import java.nio.charset.StandardCharsets;
-import java.util.*;
-import java.util.regex.Pattern;
-
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.transform.OutputKeys;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.stream.StreamResult;
-
+import hex.deeplearning.DeepLearningModel;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.lang.math.NumberUtils;
 import org.apache.commons.logging.Log;
@@ -78,9 +66,19 @@ import org.wso2.carbon.ml.database.exceptions.DatabaseHandlerException;
 import org.wso2.carbon.registry.core.RegistryConstants;
 import org.wso2.carbon.utils.ConfigurationContextService;
 import org.xml.sax.InputSource;
-
 import scala.Tuple2;
-import hex.deeplearning.DeepLearningModel;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.transform.OutputKeys;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
+import java.io.*;
+import java.nio.charset.StandardCharsets;
+import java.util.*;
+import java.util.regex.Pattern;
 
 
 /**
@@ -342,9 +340,14 @@ public class MLModelHandler {
         context.setResponseIndex(responseIndex);
         context.setSparkContext(sparkContext);
         context.setLines(lines);
+
+//        if(facts.getResponseVariable().equalsIgnoreCase("col4")) {
+//            System.out.println("LR");
+//        }else{
         // get header line
         String headerRow = databaseService.getFeatureNamesInOrderUsingDatasetVersion(datasetVersionId, columnSeparator);
         context.setHeaderRow(headerRow);
+//        }
         return context;
     }
 

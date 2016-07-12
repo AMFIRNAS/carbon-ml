@@ -15,25 +15,13 @@
  */
 package org.wso2.carbon.ml.rest.api;
 
-import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.ws.rs.*;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.cxf.jaxrs.ext.multipart.Multipart;
 import org.apache.http.HttpHeaders;
 import org.wso2.carbon.context.PrivilegedCarbonContext;
 import org.wso2.carbon.ml.commons.constants.MLConstants;
-import org.wso2.carbon.ml.commons.domain.ClusterPoint;
-import org.wso2.carbon.ml.commons.domain.MLDataset;
-import org.wso2.carbon.ml.commons.domain.MLDatasetVersion;
-import org.wso2.carbon.ml.commons.domain.SamplePoints;
-import org.wso2.carbon.ml.commons.domain.ScatterPlotPoints;
+import org.wso2.carbon.ml.commons.domain.*;
 import org.wso2.carbon.ml.core.exceptions.MLDataProcessingException;
 import org.wso2.carbon.ml.core.exceptions.MLInputValidationException;
 import org.wso2.carbon.ml.core.exceptions.MLMalformedDatasetException;
@@ -44,6 +32,13 @@ import org.wso2.carbon.ml.core.utils.MLUtils;
 import org.wso2.carbon.ml.rest.api.model.MLDatasetBean;
 import org.wso2.carbon.ml.rest.api.model.MLErrorBean;
 import org.wso2.carbon.ml.rest.api.model.MLVersionBean;
+
+import javax.ws.rs.*;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * This class defines the ML dataset API.
@@ -80,6 +75,7 @@ public class DatasetApiV10 extends MLRestAPI {
      * @param sourcePath Absolute URI of the dataset if source type is DAS
      * @param dataFormat Format of the dataset
      * @param containsHeader Header availability of the dataset
+     * @param windowLength Length of the wndow availability
      * @param inputStream Input stream of the dataset
      * @return JSON of {@link org.wso2.carbon.ml.commons.domain.MLDataset} object
      */
@@ -90,7 +86,8 @@ public class DatasetApiV10 extends MLRestAPI {
             @Multipart("description") String description, @Multipart("sourceType") String sourceType,
             @Multipart("destination") String destination, @Multipart("sourcePath") String sourcePath,
             @Multipart("dataFormat") String dataFormat, @Multipart("containsHeader") boolean containsHeader,
-            @Multipart("file") InputStream inputStream) {
+            @Multipart("windowLength") int windowLength, @Multipart("file") InputStream inputStream) {
+
         PrivilegedCarbonContext carbonContext = PrivilegedCarbonContext.getThreadLocalCarbonContext();
         int tenantId = carbonContext.getTenantId();
         String userName = carbonContext.getUsername();
@@ -110,12 +107,14 @@ public class DatasetApiV10 extends MLRestAPI {
             dataset.setComments(description);
             dataset.setDataTargetType(destination);
             dataset.setDataType(dataFormat);
+            dataset.setWindowLength(windowLength);
             dataset.setTenantId(tenantId);
             dataset.setUserName(userName);
             dataset.setContainsHeader(containsHeader);
             dataset.setStatus(MLConstants.DatasetStatus.BUSY.getValue());
 
             datasetProcessor.process(dataset, inputStream);
+
             return Response.ok(dataset).build();
         } catch (MLInputValidationException e) {
             String msg = MLUtils.getErrorMsg(String.format(

@@ -17,9 +17,6 @@
  */
 package org.wso2.carbon.ml.core.impl;
 
-import java.io.IOException;
-import java.io.InputStream;
-
 import org.wso2.carbon.ml.commons.constants.MLConstants;
 import org.wso2.carbon.ml.commons.domain.MLDataset;
 import org.wso2.carbon.ml.commons.domain.SamplePoints;
@@ -32,6 +29,9 @@ import org.wso2.carbon.ml.core.interfaces.DatasetProcessor;
 import org.wso2.carbon.ml.core.interfaces.MLOutputAdapter;
 import org.wso2.carbon.ml.core.utils.MLCoreServiceValueHolder;
 import org.wso2.carbon.ml.core.utils.MLUtils;
+
+import java.io.IOException;
+import java.io.InputStream;
 
 /**
  * File dataset processor

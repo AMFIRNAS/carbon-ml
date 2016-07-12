@@ -21,7 +21,7 @@ package org.wso2.carbon.ml.core.factories;
  * Holds all dataset types.
  */
 public enum DatasetType {
-    FILE("file"), DAS("das"), HDFS("hdfs");
+    FILE("file"), DAS("das"), HDFS("hdfs"), TIME_SERIES("time_series");
 
     private String value = null;
 

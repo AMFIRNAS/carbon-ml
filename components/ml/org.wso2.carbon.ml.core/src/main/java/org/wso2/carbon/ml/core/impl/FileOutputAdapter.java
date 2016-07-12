@@ -17,15 +17,11 @@
  */
 package org.wso2.carbon.ml.core.impl;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-
 import org.apache.commons.io.IOUtils;
 import org.wso2.carbon.ml.core.exceptions.MLOutputAdapterException;
 import org.wso2.carbon.ml.core.interfaces.MLOutputAdapter;
+
+import java.io.*;
 
 /**
  * Responsible for writing a given input stream to a specified path in local file system.
@@ -63,5 +59,10 @@ public class FileOutputAdapter implements MLOutputAdapter {
             }
         }
     }
+//
+//    @Override
+//    public void write(String outPath) throws MLOutputAdapterException {
+//
+//    }
 
 }

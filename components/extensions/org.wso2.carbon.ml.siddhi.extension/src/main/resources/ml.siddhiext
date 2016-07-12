@@ -1,1 +1,2 @@
 predict=org.wso2.carbon.ml.siddhi.extension.PredictStreamProcessor
+slide=org.wso2.siddhi.extension.time_series.TimeSeriesAttributeAggregator

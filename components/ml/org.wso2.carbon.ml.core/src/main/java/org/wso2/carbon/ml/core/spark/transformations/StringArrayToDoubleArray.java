@@ -32,8 +32,11 @@ public class StringArrayToDoubleArray implements Function<String[], double[]> {
     public double[] call(String[] tokens) throws MLModelBuilderException {
         try {
             double[] features = new double[tokens.length];
+           // System.out.println(Arrays.toString(features));
+
             for (int i = 0; i < tokens.length; ++i) {
                 features[i] = Double.parseDouble(tokens[i]);
+               // System.out.println(features[i]);
             }
             return features;
         } catch (Exception e) {
