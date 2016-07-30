@@ -176,8 +176,9 @@ public class TimeSeriesDatasetProcessor extends DatasetProcessor  {
             Scanner s = new Scanner(inputStream).useDelimiter("\n");
             while(s.hasNext()) {
                 String val = s.next();
+                String[] inputValues = val.split(",");
                 try {
-                    float floatVal = Float.parseFloat(val);
+                    float floatVal = Float.parseFloat(inputValues[1]);
                     inputHandler.send(new Float[]{floatVal});
                 } catch (Exception ex) {
                     System.out.println(ex.getMessage());
