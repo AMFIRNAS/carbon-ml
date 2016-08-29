@@ -27,7 +27,8 @@ public class MLDataset {
     private int tenantId;
     private String userName;
     private int windowLength;
-
+    private String featureSelectName;
+    private String stringFeatures;
 
     /*
      * Type of the data source i.e. hdfs, file, bam etc.
@@ -160,12 +161,28 @@ public class MLDataset {
         this.windowLength = windowLength;
     }
 
+    public String getFeatureSelectName() {
+        return featureSelectName;
+    }
+
+    public void setFeatureSelectName(String featureSelectName) {
+        this.featureSelectName = featureSelectName;
+    }
+    public String getStringFeatures() {
+        return stringFeatures;
+    }
+
+    public void setStringFeatures(String stringFeatures) {
+        this.stringFeatures = stringFeatures;
+    }
+
+
     @Override
     public String toString() {
         return "MLDataset [id=" + id + ", name=" + name + ", tenantId=" + tenantId + ", userName=" + userName
                 + ", dataSourceType=" + dataSourceType + ", dataTargetType=" + dataTargetType + ", sourcePath="
                 + sourcePath + ", dataType=" + dataType + ", comments=" + comments + ", version=" + version
-                + ", containsHeader=" + containsHeader + ", status=" + status + ", window length=" + windowLength + "]";
+                + ", containsHeader=" + containsHeader + ",featureSelect="+featureSelectName+",stringFeatures="+stringFeatures+", status=" + status + ", window length=" + windowLength + "]";
     }
 
 }

@@ -78,7 +78,7 @@ public class HdfsOutputAdapter implements MLOutputAdapter {
     }
 
 //    @Override
-//    public void write(String outPath) throws MLOutputAdapterException {
+//    public void write1(String outPath,InputStream in) throws MLOutputAdapterException {
 //
 //    }
 

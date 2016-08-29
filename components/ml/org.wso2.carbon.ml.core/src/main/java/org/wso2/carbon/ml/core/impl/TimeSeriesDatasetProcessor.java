@@ -35,7 +35,11 @@ import org.wso2.siddhi.core.event.Event;
 import org.wso2.siddhi.core.query.output.callback.QueryCallback;
 import org.wso2.siddhi.core.stream.input.InputHandler;
 
-import java.io.*;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 
@@ -47,10 +51,9 @@ import java.util.Scanner;
  * this class is for handling time series dataset
  */
 
-public class TimeSeriesDatasetProcessor extends DatasetProcessor  {
+public class TimeSeriesDatasetProcessor extends DatasetProcessor {
 
     private InputStream inputStream = null;
-    private int windowLength;
 
     public TimeSeriesDatasetProcessor(MLDataset dataset, InputStream inputStream) throws MLInputValidationException {
         super(DatasetType.TIME_SERIES, dataset);
@@ -87,15 +90,15 @@ public class TimeSeriesDatasetProcessor extends DatasetProcessor  {
             int windowLength = dataset.getWindowLength();
 
             //convert user uploading dataset to slided window format
-            convertToTimeseriesDataFormat(inputStream,windowLength);
+            convertToTimeseriesDataFormat(inputStream, windowLength);
 
             //transformed dataset path in server
-            String path =  System.getProperty("user.dir")+"/datasets/file.csv";
+            String path = System.getProperty("user.dir") + "/datasets/file.csv";
 
             //read the input stream
             InputStream is = new FileInputStream(path);
 
-            outputAdapter.write(getTargetPath(),is);
+            outputAdapter.write(getTargetPath(), is);
 
             setFirstLine(MLUtils.getFirstLine(getTargetPath()));
         } catch (InterruptedException e) {
@@ -130,8 +133,7 @@ public class TimeSeriesDatasetProcessor extends DatasetProcessor  {
 
 
     /**
-     *  convert user uploading dataset format to slided window dataset format by using siddhi inside
-     *
+     * convert user uploading dataset format to slided window dataset format by using siddhi inside
      *
      * @param inputStream
      * @param windowLength
@@ -139,30 +141,99 @@ public class TimeSeriesDatasetProcessor extends DatasetProcessor  {
      * @throws IOException
      */
 
-    private void convertToTimeseriesDataFormat(InputStream inputStream,int windowLength) throws InterruptedException, IOException {
+    private void convertToTimeseriesDataFormat(InputStream inputStream, int windowLength) throws InterruptedException, IOException {
 
-        DataInputStream dis = null;
-        DataOutputStream dos = null;
         SiddhiManager siddhiManager;
-
         siddhiManager = new SiddhiManager();
-        String inValueStream = "define stream InValueStream (inValue float);";
+        MLDataset dataset = getDataset();
+
+
+        Scanner s1 = new Scanner(inputStream).useDelimiter("\n");
+
+        String[] inputValues1 = null;
+        String features = "";
+        String selectFeatures = "";
+
+        boolean checked1 = true;
+
+        String featureSelects[] = (dataset.getFeatureSelectName()).split(",");
+        String stringFeatures[] = (dataset.getStringFeatures()).split(",");
+        int[] trackIndex = new int[featureSelects.length];
+        List<Integer> trackIndex1 = new ArrayList<>();
+        List<Integer> stringIndex1 = new ArrayList<>();
+
+        int[] stringIndex = new int[stringFeatures.length];
+        int h = 0;
+        int s = 0;
+        while (s1.hasNext()) {
+
+            String val = s1.next();
+            inputValues1 = val.split(",");
+            for (int i = 2; i < inputValues1.length; i++) {
+                for (String a : featureSelects) {
+
+                    // System.out.println(a);
+                    // System.out.println(Arrays.toString(featureSelects));
+                    if (a.equalsIgnoreCase(inputValues1[i])) {
+                        trackIndex1.add(i);
+                    }
+
+                }
+
+                for (String b : stringFeatures) {
+
+                    //System.out.println(b);
+                    //System.out.println(Arrays.toString(stringFeatures));
+                    if (b.equalsIgnoreCase(inputValues1[i])) {
+                        stringIndex1.add(i);
+
+                    }
+
+                }
+
+                System.out.println(stringIndex1);
+                System.out.println(trackIndex1);
+                System.out.println(stringFeatures);
+
+                if (!(stringIndex1.contains(i)) && !(trackIndex1.contains(i))) {
+                    if (i != inputValues1.length - 1)
+                        features += inputValues1[i] + " float ,";
+                    if (i == inputValues1.length - 1)
+                        features += inputValues1[i] + " float ";
+                } else if (stringIndex1.contains(i)) {
+                    if (i != inputValues1.length - 1)
+                        features += inputValues1[i] + " string ,";
+                    if (i == inputValues1.length - 1)
+                        features += inputValues1[i] + " string ";
+
+                } else if (trackIndex1.contains(i)) {
+                    if (i != inputValues1.length - 1)
+                        features += inputValues1[i] + " double ,";
+                    if (i == inputValues1.length - 1)
+                        features += inputValues1[i] + " double ";
+
+                }
+
+                selectFeatures += inputValues1[i] + ",";
+
+            }
+            break;
+
+        }
+
+
+        String inValueStream = "define stream InValueStream (" + features + ");";
 
         //use windowLength value
-        String eventFuseExecutionPlan = ("@info(name = 'query1') from InValueStream "
-                + "select timeseries:slide(inValue, "+windowLength+") as timeslides "
+        String eventFuseExecutionPlan = ("@info(name = 'query') from InValueStream "
+                + "select timeseries:slide(" + selectFeatures + "" + windowLength + ") as timeslides "
                 + "insert into OutMediationStream;");
         ExecutionPlanRuntime executionPlanRuntime = siddhiManager.createExecutionPlanRuntime(inValueStream + eventFuseExecutionPlan);
 
-        executionPlanRuntime.addCallback("query1", new QueryCallback() {
+        executionPlanRuntime.addCallback("query", new QueryCallback() {
             @Override
             public void receive(long timeStamp, Event[] inEvents,
                                 Event[] removeEvents) {
-               // EventPrinter.print(timeStamp, inEvents, removeEvents);
-//                Long result;
-//                for (Event event : inEvents) {
-//                    result = (Long) event.getData(0);
-//                }
             }
         });
 
@@ -172,39 +243,52 @@ public class TimeSeriesDatasetProcessor extends DatasetProcessor  {
 
         executionPlanRuntime.start();
 
-        try{
-            Scanner s = new Scanner(inputStream).useDelimiter("\n");
-            while(s.hasNext()) {
-                String val = s.next();
+        try {
+            // Scanner s = new Scanner(inputStream).useDelimiter("\n");
+            String[] features1 = selectFeatures.split(",");
+            Object[] event = null;
+            while (s1.hasNext()) {
+
+                String val = s1.next();
                 String[] inputValues = val.split(",");
+
+                int noOfFeatures = features1.length;
+
+                event = new Object[noOfFeatures];
+                int m = 0;
+
+                for (int i = 2; i < inputValues.length; i++) {
+
+
+                    if (!(stringIndex1.contains(i)) && !(trackIndex1.contains(i))) {
+                        event[m] = Float.parseFloat(inputValues[i]);
+                        m++;
+                    } else if (stringIndex1.contains(i)) {
+                        event[m] = ((String) inputValues[i]);
+                        m++;
+                    } else if (trackIndex1.contains(i)) {
+                        event[m] = Double.parseDouble(inputValues[i]);
+                        m++;
+                    }
+
+                }
+
+
                 try {
-                    float floatVal = Float.parseFloat(inputValues[1]);
-                    inputHandler.send(new Float[]{floatVal});
+                    inputHandler.send(event);
                 } catch (Exception ex) {
                     System.out.println(ex.getMessage());
                 }
+
             }
+        } catch (Exception ex) {
+            System.out.println(ex.getMessage());
+        } finally {
 
-            s.close();
-        }catch(Exception e){
-            // if any I/O error occurs
-            e.printStackTrace();
-        }finally{
-
-            // releases all system resources from the streams
-            if(inputStream!=null)
+            if (inputStream != null)
                 inputStream.close();
-            if(dos!=null)
-                inputStream.close();
-            if(dis!=null)
-                dis.close();
         }
-
-
-
         Thread.sleep(100);
-        executionPlanRuntime.shutdown();
-
 
 
     }

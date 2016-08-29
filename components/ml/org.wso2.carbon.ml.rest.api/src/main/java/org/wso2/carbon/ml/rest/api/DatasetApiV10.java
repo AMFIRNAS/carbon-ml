@@ -86,7 +86,7 @@ public class DatasetApiV10 extends MLRestAPI {
             @Multipart("description") String description, @Multipart("sourceType") String sourceType,
             @Multipart("destination") String destination, @Multipart("sourcePath") String sourcePath,
             @Multipart("dataFormat") String dataFormat, @Multipart("containsHeader") boolean containsHeader,
-            @Multipart("windowLength") int windowLength, @Multipart("file") InputStream inputStream) {
+            @Multipart("windowLength") int windowLength, @Multipart("file") InputStream inputStream, @Multipart("featureValues") String featureValues,@Multipart("stringFeatures") String stringFeatures) {
 
         PrivilegedCarbonContext carbonContext = PrivilegedCarbonContext.getThreadLocalCarbonContext();
         int tenantId = carbonContext.getTenantId();
@@ -108,6 +108,8 @@ public class DatasetApiV10 extends MLRestAPI {
             dataset.setDataTargetType(destination);
             dataset.setDataType(dataFormat);
             dataset.setWindowLength(windowLength);
+            dataset.setFeatureSelectName(featureValues);
+            dataset.setStringFeatures(stringFeatures);
             dataset.setTenantId(tenantId);
             dataset.setUserName(userName);
             dataset.setContainsHeader(containsHeader);

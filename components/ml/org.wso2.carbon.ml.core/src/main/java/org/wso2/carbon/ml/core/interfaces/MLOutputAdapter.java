@@ -38,5 +38,5 @@ public interface MLOutputAdapter {
     void write(String outPath, InputStream in) throws MLOutputAdapterException;
 
 
-  // void write(String outPath) throws MLOutputAdapterException;
+    //void write1(String outPath,InputStream in) throws MLOutputAdapterException;
 }

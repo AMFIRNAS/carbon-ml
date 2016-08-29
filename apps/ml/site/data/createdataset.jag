@@ -130,7 +130,27 @@
                                         <option value="time_series">Time Series</option>
                                     </select>               
                                 </div>
+                                <label class="input-label" id="featureVal">Exclude Feature<span class="help-tip glyphicon glyphicon-question-sign" data-toggle="tooltip" data-placement="right" title="Features"></span></label>
+                                <!--<div class="input-control text">-->
+                                    <!--<select class="form-control" id="feature-values" name="featureValues">-->
+                                        <!--<option value="windspeed">windspeed</option>-->
+                                        <!--<option value="temperature">temperature</option>-->
+                                        <!--<option value="solarflux">solarflux</option>-->
+                                        <!--<option value="humidity">humidity</option>-->
+                                        <!--<option value="clearingprice">clearingprice</option>-->
+                                    <!--</select>-->
+                                <!--</div>-->
+                                <!--<div class="col-sm-2">-->
+                                <!--<input type="checkbox" id="ts-option" name="option" value="ts-analysis">2-->
+                                 <!--</div>-->
+                                 <div class="input-control text">
+                                    <input type="text" value="" placeholder="" id="feature-values" name="featureValues"/>
+                                </div>
 
+                                <label class="input-label" id="stringFeature">String Feature<span class="help-tip glyphicon glyphicon-question-sign" data-toggle="tooltip" data-placement="right" title="StringFeatures"></span></label>
+                                <div class="input-control text">
+                                    <input type="text" value="" placeholder="" id="string-features" name="stringFeatures"/>
+                                </div>
                                 <label class="input-label" id="wl">Window Length<span class="help-tip glyphicon glyphicon-question-sign" data-toggle="tooltip" data-placement="right" title="size of the window to be split the dataset to support Time Series Algorithm"></span></label>
                                 <span class="fld-required" id="wl1">*</span>
                                 <div class="input-control text">
@@ -218,7 +238,7 @@
             function displayDataSource() {
                 var dataSourceType = $('#src-type option:selected').text();
                 if (dataSourceType == 'HDFS') {
-                    $('#source-file, #size-limit, #source-das, #source-das-table,#window-length,#wl,#wl1').hide();
+                    $('#source-file, #size-limit, #source-das, #source-das-table,#window-length,#wl,#wl1,#feature-values,#featureVal,#stringFeature,#string-features').hide();
                     $('#not-das').show();
                     var hdfsInput = '<div id="source-hdfs" class="input-control text">' +
                         '<input type="text" value="" placeholder="e.g. hdfs://localhost:9000/home/datasets/iris.csv" id="src-path" name="sourcePath" />' +
@@ -226,7 +246,7 @@
                     $('#source-hdfs-das').html(hdfsInput);
 
                 } else if (dataSourceType == 'DAS') {
-                    $('#source-file, #size-limit, #source-hdfs, #not-das, #source-das-table,#window-length,#wl,#wl1').hide();
+                    $('#source-file, #size-limit, #source-hdfs, #not-das, #source-das-table,#window-length,#wl,#wl1,#feature-values,#featureVal,#stringFeature,#string-features').hide();
                     var dasInput = '<div id="source-das">' +
                         '<div id="source-das-input" class="input-control text" style="position:relative">' +
                         '<input type="text" value="" placeholder="" id="selected-table" name="sourcePath" readonly/><a style="position:absolute; right:0px" id="select-table" class="cu-level3-btn btn-set-dt" href="#"></a>' +
@@ -237,11 +257,11 @@
                 } else if (dataSourceType == 'Time Series'){
                     $('#source-hdfs-das').html("");
                     $('#source-das-table').hide();
-                    $('#source-file, #size-limit, #not-das,#window-length,#wl,#wl1').show();
+                    $('#source-file, #size-limit, #not-das,#window-length,#wl,#wl1,#feature-values,#featureVal,#stringFeature,#string-features').show();
                 }
                 else{ // File
                     $('#source-hdfs-das').html("");
-                    $('#source-das-table,#window-length,#wl,#wl1').hide();
+                    $('#source-das-table,#window-length,#wl,#wl1,#feature-values,#featureVal,#stringFeature,#string-features').hide();
                     $('#source-file, #size-limit, #not-das').show();
                 }
             }

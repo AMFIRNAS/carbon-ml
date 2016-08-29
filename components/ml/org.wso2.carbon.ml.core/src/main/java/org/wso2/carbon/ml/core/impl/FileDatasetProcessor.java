@@ -68,7 +68,10 @@ public class FileDatasetProcessor extends DatasetProcessor {
                     + MLConstants.OUT_SUFFIX);
             setTargetPath(ioFactory.getTargetPath(dataset.getName() + "." + dataset.getTenantId() + "."
                     + System.currentTimeMillis()));
+
             outputAdapter.write(getTargetPath(), inputStream);
+
+
             setFirstLine(MLUtils.getFirstLine(getTargetPath()));
         } catch (MLOutputAdapterException e) {
             throw new MLDataProcessingException(e.getMessage(), e);

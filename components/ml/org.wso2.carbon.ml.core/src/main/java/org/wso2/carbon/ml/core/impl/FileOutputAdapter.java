@@ -60,8 +60,21 @@ public class FileOutputAdapter implements MLOutputAdapter {
         }
     }
 //
-//    @Override
-//    public void write(String outPath) throws MLOutputAdapterException {
+//  @Override
+//    public void write1(String outPath,InputStream in) throws MLOutputAdapterException {
+//
+//        if (in == null || outPath == null) {
+//            throw new MLOutputAdapterException(String.format(
+//                    "Null argument values detected. Input stream: %s Out Path: %s", in, outPath));
+//        }
+//        OutputStream out = null;
+//        try {
+//            File file = new File(outPath);
+//            out = new FileOutputStream(file);
+//            IOUtils.copy(in, out);
+//        } catch (IOException e) {
+//            throw new MLOutputAdapterException(e);
+//        }
 //
 //    }
 
